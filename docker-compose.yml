@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  rabbit-mq:
+    build:
+      dockerfile: dockers/Dockerfile.RabbitMQ
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+  orders-back:
+    build: dockers/Dockerfile.Backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbit-mq
