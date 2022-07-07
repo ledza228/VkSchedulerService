@@ -1,4 +1,10 @@
 
+var host = "http://0.0.0.0:8080";
+var backendAuthUrl = host + "/oauth2/authorization/vk";
+var backendCodeUrl = host + "/login/oauth2/code/vk?code=";
+
+
+var oauthHeader = "X-AUTH-TOKEN";
 
 searchParams = new URLSearchParams(window.location.search);
 
@@ -14,9 +20,13 @@ console.log(searchParams.get("code"));
 
 function login(){
     $.ajax({
+        url: backendAuthUrl
+    }).done(function(data, textStatus, request){
+        
+        token = request.getResponseHeader(oauthHeader);
+        localStorage.setItem("token", token);
 
-    }).done(function(data){
-        console.log(data);
+        location.href = data["urlRedirect"];
     });
 }
 
@@ -24,11 +34,17 @@ function login(){
 
 function oauthLogin(code, state){
 
-    let backUrl = "http://localhost:8080/login/oauth2/code/vk?code=" + code + "&state=" + state;
+    let backUrl = backendCodeUrl + code + "&state=" + state;
+    let token = localStorage.getItem("token");
 
     $.ajax({
-        url: backUrl
+        url: backUrl,
+        headers: {"X-AUTH-TOKEN": token}
     }).done(function(data){
-        console.log(data);
+        console.log("NOT ErROR!");
     });
+
+    //ocation.href = "/me.html";
 }
+
+

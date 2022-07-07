@@ -2,6 +2,9 @@ package by.ledza.orderlab.security;
 
 import by.ledza.orderlab.security.oauth2.CustomOauth2UserService;
 import by.ledza.orderlab.security.oauth2.VkTokenResponseConverter;
+import by.ledza.orderlab.security.oauth2.spa.OAuth2SuccessHandler;
+import by.ledza.orderlab.security.oauth2.spa.SPAAuthorizationRequestRepository;
+import by.ledza.orderlab.security.oauth2.spa.SPAOAuthAuthorizationRequestRedirectFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +16,7 @@ import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationC
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,8 +31,12 @@ import java.util.List;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+    private final SPAOAuthAuthorizationRequestRedirectFilter authAuthorizationRequestRedirectFilter;
     @Autowired
     private CustomOauth2UserService userService;
+
+    @Autowired
+    private SPAAuthorizationRequestRepository authorizationRequestRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,17 +48,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
+                .authorizationEndpoint().authorizationRequestRepository(authorizationRequestRepository).and()
                     .tokenEndpoint().accessTokenResponseClient(accessTokenResponseClient())
                     .and().userInfoEndpoint()
-                    .userService(userService);
+                    .userService(userService)
+                .and().successHandler(new OAuth2SuccessHandler());
 
+        http.addFilterBefore(authAuthorizationRequestRedirectFilter, OAuth2AuthorizationRequestRedirectFilter.class);
     }
-
 
 
     @Bean
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient(){
-
         DefaultAuthorizationCodeTokenResponseClient accessTokenResponseClient =
                 new DefaultAuthorizationCodeTokenResponseClient();
 
@@ -65,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
 
         accessTokenResponseClient.setRestOperations(restTemplate);
-
         return accessTokenResponseClient;
     }
 

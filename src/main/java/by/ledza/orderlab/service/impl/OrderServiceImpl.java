@@ -29,9 +29,7 @@ public class OrderServiceImpl implements OrderService, Distributor {
     List<Subscriber> subscribers = new ArrayList<>();
 
     public void createOrder(String userId, Order order){
-
         order.setIsActive(true);
-
         if (order.getDateTime().isBefore(OffsetDateTime.now()))
             throw new RuntimeException("Date can't be in past!");
 
@@ -46,7 +44,6 @@ public class OrderServiceImpl implements OrderService, Distributor {
     }
 
     public List<Order> getAllUserOrders(String userId){
-
         UserCreds user = userService.getUser(userId);
         if (user == null)
             throw new UserNotFoundedException();

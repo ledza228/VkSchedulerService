@@ -15,7 +15,6 @@ public class TokenServiceImpl implements TokenService {
     private String secret;
 
     public String encryptToken(String token) {
-
         try {
             byte[] keyData = secret.getBytes();
 
@@ -36,7 +35,6 @@ public class TokenServiceImpl implements TokenService {
 
 
     public String decryptToken(String cypherBase64){
-
         byte[] cypher = Base64.getDecoder().decode(cypherBase64);
 
         try {
