@@ -19,5 +19,4 @@ public class UserDTO {
     private boolean can_access_closed;
 
     private boolean is_closed;
-
 }

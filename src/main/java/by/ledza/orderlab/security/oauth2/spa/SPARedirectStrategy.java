@@ -18,7 +18,6 @@ public class SPARedirectStrategy implements RedirectStrategy {
 
         Oauth2SPAResponse oauth2SPAResponse = new Oauth2SPAResponse();
         oauth2SPAResponse.setUrlRedirect(url);
-        oauth2SPAResponse.setSession(request.getSession().getId());
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

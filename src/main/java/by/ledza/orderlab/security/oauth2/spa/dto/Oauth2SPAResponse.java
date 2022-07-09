@@ -7,6 +7,4 @@ public class Oauth2SPAResponse {
 
     private String urlRedirect;
 
-    private String session;
-
 }

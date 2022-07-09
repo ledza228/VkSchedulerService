@@ -1,8 +1,10 @@
 package by.ledza.orderlab.security;
 
+import by.ledza.orderlab.security.jwt.JwtTokenFilter;
+import by.ledza.orderlab.security.jwt.JwtTokenProvider;
 import by.ledza.orderlab.security.oauth2.CustomOauth2UserService;
 import by.ledza.orderlab.security.oauth2.VkTokenResponseConverter;
-import by.ledza.orderlab.security.oauth2.spa.OAuth2SuccessHandler;
+import by.ledza.orderlab.security.oauth2.OAuth2SuccessHandler;
 import by.ledza.orderlab.security.oauth2.spa.SPAAuthorizationRequestRepository;
 import by.ledza.orderlab.security.oauth2.spa.SPAOAuthAuthorizationRequestRedirectFilter;
 import lombok.AllArgsConstructor;
@@ -12,11 +14,14 @@ import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,12 +36,18 @@ import java.util.List;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    private final SPAOAuthAuthorizationRequestRedirectFilter authAuthorizationRequestRedirectFilter;
+    @Autowired
+    private SPAOAuthAuthorizationRequestRedirectFilter authAuthorizationRequestRedirectFilter;
     @Autowired
     private CustomOauth2UserService userService;
 
     @Autowired
     private SPAAuthorizationRequestRepository authorizationRequestRepository;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -44,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .exceptionHandling(eh -> eh.authenticationEntryPoint(new RestAuthenticationEntryPoint()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                     .anyRequest().authenticated()
                 .and()
@@ -52,9 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .tokenEndpoint().accessTokenResponseClient(accessTokenResponseClient())
                     .and().userInfoEndpoint()
                     .userService(userService)
-                .and().successHandler(new OAuth2SuccessHandler());
+                .and().successHandler(oAuth2SuccessHandler);
 
         http.addFilterBefore(authAuthorizationRequestRedirectFilter, OAuth2AuthorizationRequestRedirectFilter.class);
+        http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), OAuth2LoginAuthenticationFilter.class);
     }
 
 
@@ -88,7 +101,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
 
 }

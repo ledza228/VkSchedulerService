@@ -26,12 +26,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     @Value("${spring.security.oauth2.client.provider.vk.user-name-attribute}")
     private String attributeKeyResponse;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -48,15 +42,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         String attributeKey = "id";
         OAuth2User user = new DefaultOAuth2User(authorities, attributes, attributeKey);
 
-        createNewUser(user);
         return user;
     }
 
-    private void createNewUser(OAuth2User user){
-        if (userService.getUser(user.getName()) == null){
-            UserCreds newUser = objectMapper.convertValue(user.getAttributes(), UserCreds.class);
-            userService.save(newUser);
-        }
-    }
 
 }
