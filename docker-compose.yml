@@ -3,18 +3,20 @@ version: '3'
 services:
   rabbit-mq:
     build:
+      context: ./
       dockerfile: dockers/Dockerfile.RabbitMQ
     restart: always
 
   postgres:
     environment:
-      POSTGRES_PASSWORD:
+      POSTGRES_PASSWORD: test
       POSTGRES_DB: app
     image: postgres:latest
 
 
   orders-back:
     build:
+      context: ./
       dockerfile: dockers/Dockerfile.Backend
     ports:
       - "8080:8080"
