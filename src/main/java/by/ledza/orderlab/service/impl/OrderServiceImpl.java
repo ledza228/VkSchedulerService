@@ -1,6 +1,6 @@
 package by.ledza.orderlab.service.impl;
 
-import by.ledza.orderlab.exceptions.OrderNotFoundedException;
+import by.ledza.orderlab.exceptions.OrderException;
 import by.ledza.orderlab.exceptions.UserNotFoundedException;
 import by.ledza.orderlab.model.Order;
 import by.ledza.orderlab.model.UserCreds;
@@ -37,13 +37,13 @@ public class OrderServiceImpl implements OrderService, Distributor {
         order.setIsActive(true);
 
         if (order.getConversationId() == null)
-            throw new RuntimeException("Chat id can't be null!");
+            throw new OrderException("Chat id can't be null!");
 
         if (order.getDateTime() == null)
-            throw new RuntimeException("Date can't be null!");
+            throw new OrderException("Date can't be null!");
 
         if (order.getDateTime().isBefore(OffsetDateTime.now()))
-            throw new RuntimeException("Date can't be in past!");
+            throw new OrderException("Date can't be in past!");
 
         UserCreds user = userService.getUser(userId);
         if (user == null)
@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService, Distributor {
 
         Order userOrder = orders.stream()
                 .filter(order -> order.getId().equals(orderId))
-                .findAny().orElseThrow(() -> new OrderNotFoundedException(orderId));
+                .findAny().orElseThrow(() -> new OrderException("Order not founded!"));
 
         orderRepository.delete(userOrder);
     }

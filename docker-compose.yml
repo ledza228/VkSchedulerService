@@ -4,13 +4,20 @@ services:
   rabbit-mq:
     build:
       dockerfile: dockers/Dockerfile.RabbitMQ
-    ports:
-      - '5672:5672'
-      - '15672:15672'
+    restart: always
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: app
+    image: postgres:latest
+
 
   orders-back:
-    build: dockers/Dockerfile.Backend
+    build:
+      dockerfile: dockers/Dockerfile.Backend
     ports:
       - "8080:8080"
     depends_on:
       - rabbit-mq
+      - postgres
