@@ -41,10 +41,13 @@ function oauthLogin(code, state){
         url: backUrl,
         headers: {"X-AUTH-TOKEN": token}
     }).done(function(data){
-        console.log("NOT ErROR!");
+        jwt = data;
+        localStorage.setItem("jwt", jwt);
+        localStorage.removeItem("token");
+        location.href = "/me.html";
     });
 
-    //ocation.href = "/me.html";
+    //location.href = "/me.html";
 }
 
 

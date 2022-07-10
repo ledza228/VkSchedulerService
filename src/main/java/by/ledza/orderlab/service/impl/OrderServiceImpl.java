@@ -9,6 +9,7 @@ import by.ledza.orderlab.notifier.Subscriber;
 import by.ledza.orderlab.repository.OrderRepository;
 import by.ledza.orderlab.service.OrderService;
 import by.ledza.orderlab.service.UserService;
+import by.ledza.orderlab.service.VkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,21 @@ public class OrderServiceImpl implements OrderService, Distributor {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private VkService vkService;
+
     List<Subscriber> subscribers = new ArrayList<>();
 
     public void createOrder(String userId, Order order){
+        order.setId(null);
         order.setIsActive(true);
+
+        if (order.getConversationId() == null)
+            throw new RuntimeException("Chat id can't be null!");
+
+        if (order.getDateTime() == null)
+            throw new RuntimeException("Date can't be null!");
+
         if (order.getDateTime().isBefore(OffsetDateTime.now()))
             throw new RuntimeException("Date can't be in past!");
 
@@ -38,6 +50,10 @@ public class OrderServiceImpl implements OrderService, Distributor {
             throw new UserNotFoundedException();
 
         order.setOwner(user);
+
+        String name = vkService.getConversationNameById(user, order.getConversationId());
+        order.setConversationName(name);
+
         order = orderRepository.save(order);
 
         notifyAllAbout(order);

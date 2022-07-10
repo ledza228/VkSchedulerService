@@ -42,7 +42,6 @@ public class JwtTokenProvider {
             id = JwtUtils.getIdFromJwt(token);
         }
         catch (Exception e){
-            e.printStackTrace();
             return null;
         }
 

@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @RestController
@@ -19,8 +20,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/")
-    public String createOrderAPI(@AuthenticationPrincipal OAuth2User principal, Order order){
-        order.setConversationId(87);
+    public String createOrderAPI(@AuthenticationPrincipal OAuth2User principal, @RequestBody Order order){
         orderService.createOrder(principal.getName(), order);
         return "Success";
     }

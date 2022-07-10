@@ -3,10 +3,7 @@ package by.ledza.orderlab.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,6 +15,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Table(name = "order_lab")
 public class Order {
 
@@ -31,6 +29,9 @@ public class Order {
 
     @Column(name = "conversation_id")
     Integer conversationId;
+
+    @Column(name = "conversation_name")
+    String conversationName;
 
     @Column(name = "text")
     String text;

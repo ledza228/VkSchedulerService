@@ -28,11 +28,11 @@ public class JwtUtils {
     }
 
     public static String getIdFromJwt(String jwt){
-        Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(jwt);
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(jwt);
 
-        return claims.getBody().get("id", String.class);
+            return claims.getBody().get("id", String.class);
     }
 
     @Value("${token.jwt.secret}")

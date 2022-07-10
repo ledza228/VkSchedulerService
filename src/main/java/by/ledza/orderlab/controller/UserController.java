@@ -26,4 +26,9 @@ public class UserController {
         return "Success";
     }
 
+    @GetMapping("/token")
+    public Boolean isThereToken(@AuthenticationPrincipal OAuth2User principal){
+        return userService.getUser(principal.getName()).getVk_token() != null;
+    }
+
 }

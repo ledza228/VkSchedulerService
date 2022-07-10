@@ -1,5 +1,6 @@
 package by.ledza.orderlab.controller;
 
+import by.ledza.orderlab.dto.ConversationDTO;
 import by.ledza.orderlab.model.UserCreds;
 import by.ledza.orderlab.service.VkService;
 import by.ledza.orderlab.service.impl.UserServiceImpl;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -36,17 +38,18 @@ public class VkController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserCreds> getAllUsers(){
         return userService.getAllUsers();
     }
 
     @GetMapping("/conversations")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public List<ConversationWithMessage> getVkConversations(@AuthenticationPrincipal OAuth2User principal,
-                                                            @RequestParam(defaultValue="10") Integer length){
+    public List<ConversationDTO> getVkConversations(@AuthenticationPrincipal OAuth2User principal,
+                                                    @RequestParam(defaultValue="10") Integer length,
+                                                    @RequestParam(defaultValue="0") Integer offset){
 
-        return vkService.getConversations(principal.getName(), length);
+        return vkService.getConversations(principal.getName(), length, offset);
     }
 
 }

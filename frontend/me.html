@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>ordering</title>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">VK Scheduler</a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav">
+                    <a href="/me.html" class="nav-item nav-link active">Profile</a>
+                    <a href="/messages.html" class="nav-item nav-link">Messages</a>
+                </div>
+                <div class="navbar-nav login-nav" style="margin-left: auto;">
+                    <a href="/login.html" class="nav-item nav-link login-href">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+
+    <div class="container-fluid p-2" style="height: 300px;">
+        <div>
+            <img class="rounded float-left p-3 avatar" src="" height="200" width="200">
+        </div>
+        <h2 class="pt-3 text-dark name" style="padding-left: 15%;"></h2>
+    </div>
+
+    <div class="container-fluid" style="width: 1000px;">
+        <p class="text-muted lead">VK TOKEN:</p>
+        <div>
+            <input class="form-control token-form" placeholder="vk...">
+            <button class="btn btn-primary save-token-btn" onclick="saveToken()">Save</button>
+        </div>
+        <div class="is-token-saved text-success" hidden=true>Saved</div>
+    </div>
+
+        <div class="container-fluid" style="width: 1000px; margin-top: 60px;">
+            
+            <div class="lead">
+                How to get this token:
+            </div>
+            <br>
+            <p>
+                Click on 
+                <a target=”_blank” href="https://oauth.vk.com/authorize?client_id=2685278&scope=1073737727&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1">
+                this
+                </a>
+                and log in. After that in your url would be access token (in access_token param).<br> Copy it and paste in the form.   
+            </p>
+            <span class="text-muted">Is it secure? - And yes and no. Every token will be encrypted in my side. I promise that I won't use it.</span>
+        </div>
+    
+    <!-- Optional JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="js/api.js"></script>
+    <script src="js/me.js"></script>
+    </body>
+</html>
