@@ -4,21 +4,15 @@ import by.ledza.orderlab.dto.ConversationDTO;
 import by.ledza.orderlab.model.UserCreds;
 import by.ledza.orderlab.service.VkService;
 import by.ledza.orderlab.service.impl.UserServiceImpl;
-import by.ledza.orderlab.vk.VkUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vk.api.sdk.objects.messages.ConversationWithMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -37,10 +31,11 @@ public class VkController {
         return principal.getAttributes();
     }
 
+    /*development endpoint*/
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserCreds> getAllUsers(){
-        return userService.getAllUsers();
+        return null;
     }
 
     @GetMapping("/conversations")
