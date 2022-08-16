@@ -39,6 +39,9 @@ public class SPAAuthorizationRequestRepository implements AuthorizationRequestRe
     @Override
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
 
+        if (request.getHeader("X-AUTH-TOKEN") == null)
+            return null;
+
         Integer id = Integer.parseInt(request.getHeader("X-AUTH-TOKEN"));
 
         OAuth2AuthorizationRequest authorizationRequest = authorizationContainer.get(id);

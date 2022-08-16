@@ -9,7 +9,7 @@ services:
 
   postgres:
     environment:
-      POSTGRES_PASSWORD: test
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_DB: app
     image: postgres:latest
 
@@ -18,6 +18,8 @@ services:
     build:
       context: ./
       dockerfile: dockers/Dockerfile.Backend
+    env_file:
+      - .env
     ports:
       - "8080:8080"
     depends_on:
